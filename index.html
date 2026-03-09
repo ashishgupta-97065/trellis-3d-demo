@@ -594,6 +594,24 @@
       .sd-price { font-size: 18px; }
       .sd-btn { font-size: 12px; padding: 10px; }
     }
+
+    @media (max-width: 480px) {
+      .browser-wrap {
+        transform-origin: top center;
+        transform: scale(0.82);
+        margin-bottom: -10%;
+      }
+      .browser-url { font-size: 8px; }
+      .sd-search { display: none; }
+      .sd-img-area img { max-width: 140px; max-height: 140px; }
+    }
+
+    @media (max-width: 360px) {
+      .browser-wrap {
+        transform: scale(0.7);
+        margin-bottom: -20%;
+      }
+    }
   </style>
 </head>
 <body>
