@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Commerce AI — rishXation Grey Slide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #07070f;
+      --surface:  #0f0f1c;
+      --surface2: #161628;
+      --border:   rgba(255,255,255,0.06);
+      --gold:     #c9953a;
+      --gold-l:   #f0c96a;
+      --indigo:   #6c6ef5;
+      --indigo-l: #a5b4fc;
+      --text:     #e4e4f0;
+      --muted:    #6b6b8e;
+      --r:        16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Scroll progress bar ─── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--indigo), var(--gold));
+      z-index: 1000; transition: width 0.1s;
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      backdrop-filter: blur(20px);
+      background: rgba(7,7,15,0.7);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 15px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text);
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+      color: var(--muted); text-decoration: none; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── Sections ─── */
+    section { padding: 120px 0; position: relative; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--gold);
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-label::before {
+      content: ''; width: 28px; height: 1px; background: var(--gold);
+    }
+
+    .section-title {
+      font-size: clamp(36px, 4vw, 54px);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .section-title .accent { color: var(--gold-l); }
+    .section-title .accent-blue { color: var(--indigo-l); }
+
+    .section-body {
+      font-size: 17px; font-weight: 300; color: var(--muted);
+      line-height: 1.75; max-width: 540px;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(100px); pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 600px; height: 600px;
+      background: rgba(108,110,245,0.12);
+      top: -100px; right: -100px;
+    }
+    .hero-orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(201,149,58,0.08);
+      bottom: 50px; left: -60px;
+    }
+
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(108,110,245,0.12);
+      border: 1px solid rgba(108,110,245,0.25);
+      border-radius: 40px; padding: 6px 16px;
+      font-size: 12px; font-weight: 500;
+      color: var(--indigo-l); letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--indigo-l);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 5.5vw, 80px);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+    .hero-title .line2 {
+      display: block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-l) 50%, var(--indigo-l) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 18px; font-weight: 300; color: var(--muted);
+      line-height: 1.7; max-width: 480px; margin-bottom: 44px;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--gold) 0%, #e0a83c 100%);
+      color: #0a0608; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 14px 32px; border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201,149,58,0.35);
+    }
+    .btn-primary svg { transition: transform 0.2s; }
+    .btn-primary:hover svg { transform: translateX(3px); }
+
+    .hero-img-wrap {
+      position: relative;
+    }
+    .hero-img-glow {
+      position: absolute; inset: -40px;
+      background: radial-gradient(circle, rgba(108,110,245,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-product-img {
+      width: 100%; max-width: 480px;
+      border-radius: 20px;
+      display: block; margin: 0 auto;
+      position: relative; z-index: 1;
+      animation: float 6s ease-in-out infinite;
+      filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6));
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; color: var(--muted); font-size: 11px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+    }
+    .scroll-arrow {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollDrop 2s ease-in-out infinite;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 1px; height: 80px; margin: 0 auto;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    }
+
+    /* ─── BROWSER MOCKUP ─── */
+    #source { background: var(--surface); }
+
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: center;
+    }
+
+    .browser-wrap {
+      position: relative;
+      opacity: 0; transform: translateX(-30px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .browser-wrap.visible { opacity: 1; transform: none; }
+
+    .browser {
+      background: #1a1a2e;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+    .browser-bar {
+      background: #111120;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .browser-dots {
+      display: flex; gap: 6px;
+    }
+    .browser-dots span {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .browser-dots span:nth-child(1) { background: #ff5f57; }
+    .browser-dots span:nth-child(2) { background: #febc2e; }
+    .browser-dots span:nth-child(3) { background: #28c840; }
+    .browser-url {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border-radius: 6px; padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .browser-url .domain { color: var(--text); }
+    .browser-content {
+      padding: 0;
+      background: #fff;
+    }
+    /* Simulated Snapdeal header */
+    .sd-header {
+      background: #e40046;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sd-logo {
+      font-weight: 800; font-size: 16px; color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .sd-search {
+      flex: 1; background: #fff; border-radius: 4px;
+      padding: 6px 12px; font-size: 11px; color: #999;
+    }
+    /* Product display in browser */
+    .sd-product {
+      display: grid; grid-template-columns: 55% 45%;
+      background: #f8f8f8; min-height: 200px;
+    }
+    .sd-img-area {
+      background: #fff; display: flex;
+      align-items: center; justify-content: center;
+      padding: 16px; border-right: 1px solid #eee;
+    }
+    .sd-img-area img {
+      max-width: 140px; max-height: 140px;
+      object-fit: contain;
+    }
+    .sd-info {
+      padding: 14px 12px;
+    }
+    .sd-brand {
+      font-size: 9px; color: #e40046; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .sd-title {
+      font-size: 11px; font-weight: 600; color: #222;
+      line-height: 1.4; margin: 4px 0 6px;
+      font-family: Arial, sans-serif;
+    }
+    .sd-price {
+      font-size: 16px; font-weight: 700; color: #222;
+      font-family: Arial, sans-serif;
+    }
+    .sd-off { font-size: 10px; color: #388e3c; margin-left: 6px; }
+    .sd-rating {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #388e3c; color: #fff; border-radius: 3px;
+      font-size: 9px; padding: 2px 5px; margin-top: 6px;
+    }
+    .sd-btn {
+      display: block; margin-top: 10px;
+      background: #e40046; color: #fff; border-radius: 4px;
+      padding: 7px 10px; font-size: 10px; font-weight: 700;
+      text-align: center; font-family: Arial, sans-serif;
+    }
+
+    .source-text {
+      opacity: 0; transform: translateX(30px);
+      transition: opacity 0.6s 0.15s, transform 0.6s 0.15s;
+    }
+    .source-text.visible { opacity: 1; transform: none; }
+
+    .tag-row {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;
+    }
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px; padding: 8px 14px;
+      font-size: 13px; color: var(--muted);
+    }
+    .tag svg { color: var(--gold); }
+
+    /* ─── VIDEO SECTION ─── */
+    #video-section { background: var(--bg); }
+
+    .video-container {
+      position: relative; border-radius: 20px; overflow: hidden;
+      background: #000;
+      box-shadow: 0 0 0 1px var(--border), 0 60px 120px rgba(0,0,0,0.6);
+      opacity: 0; transform: scale(0.97);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .video-container.visible { opacity: 1; transform: scale(1); }
+
+    .video-label {
+      position: absolute; top: 20px; left: 20px; z-index: 10;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 8px 14px;
+    }
+    .video-label .rec-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ef4444;
+      animation: pulse 1.5s infinite;
+    }
+    .video-label span {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #fff;
+    }
+
+    video {
+      width: 100%; display: block;
+      max-height: 600px; object-fit: cover;
+    }
+
+    .video-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 28px; flex-wrap: wrap; gap: 16px;
+    }
+    .video-meta p { font-size: 15px; color: var(--muted); }
+    .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px; padding: 8px 14px;
+      font-size: 12px; font-weight: 500;
+      color: var(--text);
+    }
+    .badge-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+    }
+    .badge-dot.green { background: #4ade80; }
+    .badge-dot.blue { background: var(--indigo-l); }
+    .badge-dot.gold { background: var(--gold); }
+
+    /* ─── 3D VIEWER ─── */
+    #viewer-section { background: var(--surface); }
+
+    .viewer-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+
+    .model-wrap {
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border);
+      background: #05050d;
+      box-shadow: 0 0 80px rgba(108,110,245,0.08), 0 40px 80px rgba(0,0,0,0.4);
+      position: relative;
+      opacity: 0; transform: translateX(-30px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .model-wrap.visible { opacity: 1; transform: none; }
+
+    model-viewer {
+      width: 100%; height: 520px;
+      background: transparent;
+      --progress-bar-color: var(--gold);
+      --progress-mask: none;
+    }
+
+    .model-controls-hint {
+      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 40px; padding: 8px 16px;
+      font-size: 11px; color: var(--muted);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .viewer-info {
+      padding-top: 20px;
+      opacity: 0; transform: translateX(30px);
+      transition: opacity 0.7s 0.15s, transform 0.7s 0.15s;
+    }
+    .viewer-info.visible { opacity: 1; transform: none; }
+
+    .feature-list {
+      margin-top: 36px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .feature-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+    .feature-item:hover { border-color: rgba(108,110,245,0.3); }
+    .feature-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(108,110,245,0.12);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .feature-item h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .feature-item p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─── HOW IT WORKS ─── */
+    #how {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .how-title {
+      text-align: center; margin-bottom: 72px;
+    }
+    .how-title .section-label { justify-content: center; }
+    .how-title .section-label::before { display: none; }
+
+    .timeline {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 48px; position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; top: 40px; left: calc(100%/6);
+      right: calc(100%/6); height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--border) 20%,
+        var(--border) 80%,
+        transparent
+      );
+    }
+
+    .timeline-step {
+      text-align: center;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .timeline-step.visible { opacity: 1; transform: none; }
+    .timeline-step:nth-child(2) { transition-delay: 0.12s; }
+    .timeline-step:nth-child(3) { transition-delay: 0.24s; }
+
+    .timeline-icon-wrap {
+      width: 80px; height: 80px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      position: relative;
+    }
+    .timeline-icon-wrap::after {
+      content: ''; position: absolute;
+      inset: -1px; border-radius: 50%;
+      background: conic-gradient(var(--gold) 0deg, var(--indigo) 120deg, transparent 120deg);
+      z-index: -1; animation: spin 8s linear infinite;
+    }
+    .timeline-icon-wrap::before {
+      content: ''; position: absolute;
+      inset: 1px; border-radius: 50%;
+      background: var(--surface); z-index: 0;
+    }
+    .timeline-icon-wrap svg { position: relative; z-index: 1; }
+    .timeline-step h4 {
+      font-size: 18px; font-weight: 700; margin-bottom: 10px;
+    }
+    .timeline-step p {
+      font-size: 14px; color: var(--muted); line-height: 1.6;
+    }
+    .tl-step-label {
+      font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold);
+      font-weight: 600; margin-bottom: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── PRODUCT PAGE LINK ─── */
+    .product-page-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 16px;
+      font-size: 13px; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .product-page-link:hover {
+      color: var(--gold-l);
+      border-color: var(--gold);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      text-align: center;
+    }
+    .footer-note {
+      font-size: 12px; color: var(--muted); letter-spacing: 0.05em;
+    }
+    .footer-note span { color: var(--gold); }
+
+    /* ─── Animations ─── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    @keyframes scrollDrop {
+      0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      30% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(1) translateY(10px); }
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .container { padding: 0 24px; }
+      section { padding: 80px 0; }
+      .hero-inner, .two-col, .viewer-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero-img-wrap { order: -1; }
+      .hero-product-img { max-width: 280px; }
+      .timeline { grid-template-columns: 1fr; gap: 40px; }
+      .timeline::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">3D<span>Commerce</span> AI</div>
+  <div class="nav-links">
+    <a href="#source">The Input</a>
+    <a href="#video-section">AI Video</a>
+    <a href="#viewer-section">3D Model</a>
+    <a href="#how">How It Works</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="dot"></span>
+          Powered by Microsoft TRELLIS
+        </div>
+        <h1 class="hero-title">
+          One Image.<br>
+          <span class="line2">Infinite Dimensions.</span>
+        </h1>
+        <p class="hero-sub">
+          We take any product photo from your e-commerce catalog and transform it into a photorealistic, fully interactive 3D model — in under a minute.
+        </p>
+        <a href="#viewer-section" class="btn-primary">
+          Explore the 3D Model
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="hero-img-wrap">
+        <div class="hero-img-glow"></div>
+        <img
+          class="hero-product-img"
+          src="./rishXation-Grey-Men-s-Slide.webp"
+          alt="rishXation Grey Men's Slide"
+        >
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SOURCE / INPUT ─── -->
+<section id="source">
+  <div class="container">
+    <div class="two-col">
+
+      <!-- Browser Mockup -->
+      <div class="browser-wrap">
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">
+              <span class="domain">snapdeal.com</span>/product/rishxation-white-mens-slide-flip/8070451208994580819
+            </div>
+          </div>
+          <div class="browser-content">
+            <div class="sd-header">
+              <div class="sd-logo">snapdeal</div>
+              <div class="sd-search">Search for products, brands and more</div>
+            </div>
+            <div class="sd-product">
+              <div class="sd-img-area">
+                <img src="./rishXation-Grey-Men-s-Slide.webp" alt="Product">
+              </div>
+              <div class="sd-info">
+                <div class="sd-brand">rishXation</div>
+                <div class="sd-title">Grey Men's Slide &amp; Flip Flops — Open Toe Slip-On</div>
+                <div class="sd-price">₹399 <span class="sd-off">78% off</span></div>
+                <div class="sd-rating">★ 3.9 &nbsp;|&nbsp; 142</div>
+                <div class="sd-btn">ADD TO CART</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a
+          href="https://www.snapdeal.com/product/rishxation-white-mens-slide-flip/8070451208994580819#bcrumbLabelId:257"
+          target="_blank" rel="noopener"
+          class="product-page-link"
+        >
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+          View Original Product Page
+        </a>
+      </div>
+
+      <!-- Text -->
+      <div class="source-text">
+        <div class="section-label">01 / The Input</div>
+        <h2 class="section-title">
+          A single image.<br>
+          <span class="accent">That's the starting point.</span>
+        </h2>
+        <p class="section-body">
+          We sourced this standard product listing from Snapdeal — one flat image, no special photography, no studio setup. This is exactly what millions of catalog items look like today.
+        </p>
+        <div class="tag-row">
+          <div class="tag">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Single WebP image
+          </div>
+          <div class="tag">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            Live product page
+          </div>
+          <div class="tag">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            No 3D camera needed
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── VIDEO ─── -->
+<section id="video-section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 56px;">
+      <div class="section-label" style="justify-content: center;">
+        <span>02 / AI-Generated 3D Video</span>
+      </div>
+      <h2 class="section-title" style="max-width: 640px; margin: 0 auto 16px;">
+        From flat image to
+        <span class="accent-blue">360° cinematic view</span>
+      </h2>
+      <p class="section-body" style="margin: 0 auto; text-align: center;">
+        TRELLIS AI reconstructed the full geometry and renders it as a smooth 360° turntable — no motion capture, no modelers.
+      </p>
+    </div>
+
+    <div class="video-container">
+      <div class="video-label">
+        <span class="rec-dot"></span>
+        <span>AI Generated · TRELLIS</span>
+      </div>
+      <video autoplay loop muted playsinline>
+        <source src="./rishXation-Grey-Men-s-Slide-trellis_site.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="video-meta">
+      <p>rishXation Grey Men's Slide — 360° reconstruction</p>
+      <div class="badges">
+        <div class="badge"><div class="badge-dot green"></div> Auto-loop playback</div>
+        <div class="badge"><div class="badge-dot blue"></div> Full geometry capture</div>
+        <div class="badge"><div class="badge-dot gold"></div> E-commerce ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── 3D VIEWER ─── -->
+<section id="viewer-section">
+  <div class="container">
+    <div class="viewer-grid">
+
+      <div class="model-wrap">
+        <model-viewer
+          src="./rishXation-Grey-Men-s-Slide-trellis_site.glb"
+          alt="rishXation Grey Men's Slide 3D Model"
+          auto-rotate
+          auto-rotate-delay="500"
+          rotation-per-second="25deg"
+          camera-controls
+          shadow-intensity="1"
+          shadow-softness="1"
+          environment-image="https://modelviewer.dev/shared-assets/environments/neutral.hdr"
+          exposure="1.1"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          loading="eager"
+          style="background: transparent;"
+        ></model-viewer>
+        <div class="model-controls-hint">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/>
+          </svg>
+          Drag to rotate &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Two-finger pan
+        </div>
+      </div>
+
+      <div class="viewer-info">
+        <div class="section-label">03 / Interactive 3D Model</div>
+        <h2 class="section-title">
+          Fully interactive.<br>
+          <span class="accent">Embed anywhere.</span>
+        </h2>
+        <p class="section-body">
+          The GLB model is ready to drop into your storefront, AR try-on experience, or any WebGL viewer — no plugins, no friction.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <div>
+              <h5>Full Orbit Control</h5>
+              <p>Customers explore every angle — top, bottom, side, sole. Total product confidence.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <div>
+              <h5>AR Try-On (Mobile)</h5>
+              <p>On iOS and Android, the AR button places the product in the real world via WebXR.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <div>
+              <h5>Drop-in Ready</h5>
+              <p>Standard GLB format. Works in Shopify, WooCommerce, Magento, or any web stack.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div>
+              <h5>Proven Impact</h5>
+              <p>3D product views reduce returns by up to 40% and boost add-to-cart rates by 30%+.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="how">
+  <div class="container">
+    <div class="how-title">
+      <div class="section-label">The Process</div>
+      <h2 class="section-title">
+        From listing to 3D<br><span class="accent-blue">in three steps</span>
+      </h2>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-icon-wrap">
+          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="var(--gold)" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div class="tl-step-label">Input</div>
+        <h4>Share a Product URL</h4>
+        <p>Any e-commerce listing works — Snapdeal, Amazon, Flipkart, or your own catalog. We extract the primary product image automatically.</p>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-icon-wrap">
+          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="var(--indigo-l)" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+        </div>
+        <div class="tl-step-label">Processing</div>
+        <h4>TRELLIS AI Reconstructs</h4>
+        <p>Microsoft's state-of-the-art model infers 3D structure, texture, and geometry from the single image — in under 60 seconds.</p>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-icon-wrap">
+          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#4ade80" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <div class="tl-step-label">Output</div>
+        <h4>GLB + Video Delivered</h4>
+        <p>You receive an interactive 3D model (GLB), a 360° looping video (MP4), and a web-embed snippet — ready to publish immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <p class="footer-note">
+      Powered by <span>Microsoft TRELLIS</span> &nbsp;·&nbsp; Client showcase demo
+    </p>
+  </div>
+</footer>
+
+<!-- ─── JS ─── -->
+<script>
+  // Scroll progress bar
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    document.getElementById('progress').style.width = (scrollY / max * 100) + '%';
+  });
+
+  // Intersection Observer for reveal animations
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll(
+    '.browser-wrap, .source-text, .video-container, .model-wrap, .viewer-info, .timeline-step'
+  ).forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
